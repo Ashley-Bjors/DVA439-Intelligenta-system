@@ -24,17 +24,13 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
         
         function [nextState, reward, isDone, loggedSignals] = step(obj, action)
             loggedSignals = [];
-
+            
             if obj.isDone
                 error("Spelet är redan slut. Anropa reset() innan nästa drag.");
             end
             
             % Kontrollera om draget är giltigt
-            if(obj.player == 1)
-                [validMove, playAt] = obj.getValidMove(action);
-            else
-                [validMove, playAt] = obj.getValidMove(obj,randi(obj.Columns)); %Random computer move, change for agent action later
-            end
+            [validMove, playAt] = obj.getValidMove(action);
             if ~validMove
                 reward = -10*obj.player; % Straffa ogiltigt drag
                 nextState = obj.getObservation();
@@ -53,12 +49,12 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
             else
                 reward = 0; % Ingen belöning för neutralt drag
             end
+
+            nextState = obj.getObservation();
             
             % Byt spelare
-            if(obj.player == 1)
-                nextState = obj.getObservation();
-            end
             obj.player = -obj.player;
+            
             isDone = obj.isDone;
         end
         
