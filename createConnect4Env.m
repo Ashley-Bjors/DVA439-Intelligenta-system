@@ -49,7 +49,9 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
             % Belöningsfunktion
             if isWin
                 reward = 10*obj.player; % Stor belöning vid vinst
-                obj.isDone = true;
+                nextState = obj.getObservation();
+                isDone = true;
+                return;
             else
                 reward = 0; % Ingen belöning för neutralt drag
             end
