@@ -14,7 +14,7 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
             observationInfo = rlNumericSpec(obsDim, 'LowerLimit', 0, 'UpperLimit', 1);
             actionInfo = rlFiniteSetSpec(1:7);
             actionInfo.Name = 'Column Selection';
-
+            
             % Anropa superklassens konstruktor FÖRST
             obj@rl.env.MATLABEnvironment(observationInfo, actionInfo);
             
@@ -23,47 +23,57 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
         end
         
         function [nextState, reward, isDone, loggedSignals] = step(obj, action)
-            loggedSignals = [];
-
-            if obj.isDone
-                error("Spelet är redan slut. Anropa reset() innan nästa drag.");
-            end
-            
-            % Kontrollera om draget är giltigt
-            if(obj.player == 1)
-                [validMove, playAt] = obj.getValidMove(action);
-            else
-                [validMove, playAt] = obj.getValidMove(obj,randi(obj.Columns)); %Random computer move, change for agent action later
-            end
-            if ~validMove
-                reward = -10*obj.player; % Straffa ogiltigt drag
+            opponent = load(".\basicAgent.mat");
+            opponent = opponent.agent;
+            for i = 1:2
+                loggedSignals = [];
+    
+                if obj.isDone
+                    error("Spelet är redan slut. Anropa reset() innan nästa drag.");
+                end
+                
+                
+                % Kontrollera om draget är giltigt
+                if(obj.player == 1)
+                    [validMove, playAt] = obj.getValidMove(action);
+                else
+                    if (isa(opponent,"int16"))
+                        opp = [randi(7)];
+                    else
+                        opp = getAction(opponent,nextState);
+                        opp = cell2mat(opp);
+                    end
+                    [validMove, playAt] = obj.getValidMove(opp); %Random computer move, change for agent action later
+                end
+                if ~validMove
+                    reward = -10*obj.player; % Straffa ogiltigt drag
+                    nextState = obj.getObservation();
+                    isDone = true;
+                    return;
+                end
+                
+                % Utför draget
+                obj.board(playAt(1), playAt(2)) = obj.player;
+                isWin = obj.checkWin(playAt);
+                
+                % Belöningsfunktion
+                if isWin
+                    reward = 10*obj.player; % Stor belöning vid vinst
+                    nextState = obj.getObservation();
+                    isDone = true;
+                    return;
+                else
+                    reward = 0; % Ingen belöning för neutralt drag
+                end
+                
+                % Byt spelare
+                
                 nextState = obj.getObservation();
-                isDone = true;
-                return;
+                
+                obj.player = -obj.player;
+                isDone = obj.isDone;
             end
-            
-            % Utför draget
-            obj.board(playAt(1), playAt(2)) = obj.player;
-            isWin = obj.checkWin(playAt);
-            
-            % Belöningsfunktion
-            if isWin
-                reward = 10*obj.player; % Stor belöning vid vinst
-                nextState = obj.getObservation();
-                isDone = true;
-                return;
-            else
-                reward = 0; % Ingen belöning för neutralt drag
-            end
-            
-            % Byt spelare
-            if(obj.player == 1)
-                nextState = obj.getObservation();
-            end
-            obj.player = -obj.player;
-            isDone = obj.isDone;
         end
-        
         function state = reset(obj)
             obj.board = zeros(obj.Rows, obj.Columns);
             obj.player = 1;

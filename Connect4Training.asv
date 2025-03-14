@@ -1,0 +1,8 @@
+clear agent
+env = createConnect4Env()
+basicAgent = load(".\basicAgent.mat")
+agent = mytrain(basicAgent,ans)
+
+
+
+agent1 = mytrain(agent,ans)
