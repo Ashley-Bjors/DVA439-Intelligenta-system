@@ -1,6 +1,6 @@
 clear
 
-startNew = true;
+startNew = false;
 if(startNew)
     %   If you want to start from scratch
     agent = load(".\basicAgent.mat").agent;
@@ -8,13 +8,13 @@ if(startNew)
     save("agentMatrix.mat","agentMatrix");
 else
     %   If you dont want to start from scratch
-    agentMatrix = load(".\agentMatrix")
-    agent = agentMatrix(size(agentMatrix,2))
+    agentMatrix = load(".\agentMatrix").agentMatrix;
+    agent = agentMatrix(size(agentMatrix,2));
 end
 
 
 
-trainingIterations = 5;
+trainingIterations = 0;
 
 env = createConnect4Env();
 for i = 1:trainingIterations
@@ -25,3 +25,5 @@ for i = 1:trainingIterations
     agentMatrix(size(agentMatrix,2) + 1) = agent;
     save("agentMatrix.mat","agentMatrix");
 end
+
+winrate = verifyConnect4()
