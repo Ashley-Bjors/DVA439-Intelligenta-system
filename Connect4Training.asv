@@ -1,8 +1,29 @@
-clear agent
+clear all
+
+env = createConnect4Env();
+
+%   If you want to start from scratch
+agent = load(".\basicAgent.mat").agent;
+agentMatrix(1) = agent;
+save("agentMatrix.mat","agentMatrix");
+
+%   If you dont want to start from scratch
+%agentMatrix = load(".\agentMatrix")
+%agent = agentMatrix(size(agentMatrix,2))
+
+for i = 1:3
+    agent = mytrain(agent,env)
+    agentMatrix(size(agentMatrix,2) + 1) = agent
+
+    save("agentMatrix.mat","agentMatrix")
+end
+%agent = mytrain(agent,env)
+agentMatrix(size(agentMatrix,2) + 1) = agent
+save("agentMatrix.mat","agentMatrix")
+agent1 = load(".\agentMatrix.mat").agentMatrix
+size(agent1,2)
+agent1 = agent1(size(agent1,2))
+
 env = createConnect4Env()
-basicAgent = load(".\basicAgent.mat")
-agent = mytrain(basicAgent,ans)
 
-
-
-agent1 = mytrain(agent,ans)
+agent = mytrain(agent,env)

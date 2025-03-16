@@ -8,7 +8,8 @@ function [newAgent,trainStats] = mytrain(agent,env)
 
 %% Create training options
 trainOptions = rlTrainingOptions();
-
+trainOptions.MaxEpisodes = 100;
+trainOptions.MaxStepsPerEpisode = 50;
 %% Make copy of agent
 newAgent = copy(agent);
 

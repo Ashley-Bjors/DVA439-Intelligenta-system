@@ -23,8 +23,8 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
         end
         
         function [nextState, reward, isDone, loggedSignals] = step(obj, action)
-            opponent = load(".\basicAgent.mat");
-            opponent = opponent.agent;
+            opponent = load(".\agentMatrix.mat").agentMatrix;
+            opponent = opponent(size(opponent,2));
             for i = 1:2
                 loggedSignals = [];
     
