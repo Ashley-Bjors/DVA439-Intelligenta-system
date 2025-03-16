@@ -1,4 +1,4 @@
-clear all
+clear
 
 startNew = true;
 if(startNew)
@@ -13,8 +13,11 @@ else
 end
 
 
+
+trainingIterations = 5;
+
 env = createConnect4Env();
-for i = 1:3
+for i = 1:trainingIterations
     %Trains the newest agent
     agent = mytrain(agent,env);
     
