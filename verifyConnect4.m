@@ -10,10 +10,13 @@ for i = 1:size(agentMatrix,2)
     for j = 1:triesAgainstSame
         env = Connect4Env(); % Skapa en instans av spelet
         state = env.reset(); % Starta om spelet
+        
 
         while ~env.isDone
+            %   Get action from opponent
             move = getAction(agentMatrix(i),state);
             move = cell2mat(move);
+            %   Get response from agent
             [nextState, reward, isDone] = env.step(move);
         end
        
