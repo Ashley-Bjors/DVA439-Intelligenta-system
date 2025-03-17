@@ -34,7 +34,7 @@ classdef Connect4Env < handle
             % Kontrollera om draget är giltigt
             [validMove, playAt] = getValidMove(obj.board, action);
             if ~validMove
-                %reward = -10; % Straffa ogiltigt drag
+                reward = -10; % Straffa ogiltigt drag
                 nextState = obj.getObservation();
                 isDone = true;
                 return;
