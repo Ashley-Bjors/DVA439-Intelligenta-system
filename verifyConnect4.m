@@ -17,7 +17,7 @@ for i = 1:size(agentMatrix,2)
             move = getAction(agentMatrix(i),state);
             move = cell2mat(move);
             %   Get response from agent
-            [nextState, reward, isDone] = env.step(move);
+            [state, reward, env.isDone] = env.step(move);
         end
        
         winRate(i) = winRate(i) - env.player/triesAgainstSame;
