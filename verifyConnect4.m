@@ -2,38 +2,51 @@ function winRate = verifyConnect4()
 
 
 agentMatrix = load(".\agentMatrix").agentMatrix;
-winRate(size(agentMatrix,2):size(agentMatrix,2)) = 0;
+winRate(size(agentMatrix,2),size(agentMatrix,2)) = 0;
 
 triesAgainstSame = 1;
-for k = 1:size(agentMatrix,2)
-    for i = 1:size(agentMatrix,2)
-        for j = 1:triesAgainstSame
-            env = Connect4Env(); % Skapa en instans av spelet
-            state = env.reset(); % Starta om spelet
-            
-    
-            while ~env.isDone
-                %   get action from agent
-                move = getAction(agentMatrix(size(agentMatrix,2)),state);
-                move = cell2mat(move);
-                %   Get response from agent
-                [state, reward, env.isDone] = env.step(move);
+for i = 1:size(agentMatrix,2)
+    for j = 1:size(agentMatrix,2)
+        if(i ~= j)
+            for k = 1:triesAgainstSame
+                env = Connect4Env(); % Skapa en instans av spelet
+                state = env.reset(); % Starta om spelet
                 
-                if(env.isDone)
-                    break;
+        
+                while ~env.isDone
+                    %   get action from agent
+                    move = getAction(agentMatrix(i),state);
+                    move = cell2mat(move);
+                    %   Get response from enviroment
+                    [state, reward, env.isDone] = env.step(move);
+                    
+                    if(env.isDone)
+                        break;
+                    end
+                    
+                    %   Get action from opponent
+                    move = getAction(agentMatrix(j),state);
+                    move = cell2mat(move);
+                    %   Get response from enviroment
+                    [state, reward, env.isDone] = env.step(move);
+                    
                 end
-                
-                %   Get action from opponent
-                move = getAction(agentMatrix(i),state);
-                move = cell2mat(move);
-                %   Get response from agent
-                [state, reward, env.isDone] = env.step(move);
+                env.displayBoard();
+               
+                winRate(i,j) = winRate(i,j) - env.player/triesAgainstSame;
                 
             end
-            env.displayBoard();
-           
-            winRate(i) = winRate(i) - env.player/triesAgainstSame;
-            
         end
     end
 end
+result = 0;
+for i = 1:size(agentMatrix,2)
+    for j = 1:size(agentMatrix,2)
+        if(i > j)
+            result = result + winRate(i,j);
+        else
+            result = result - winRate(i,j);
+        end
+    end
+end
+disp(result)
