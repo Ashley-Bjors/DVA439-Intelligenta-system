@@ -5,6 +5,10 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
         board
         player = 1; % 1 eller -1
         isDone = false;
+        opponent = 1
+        turns = 1
+        discount = 0.9;
+        agentMatrix = load(".\agentMatrix.mat").agentMatrix;
     end
     
     methods
@@ -23,8 +27,9 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
         end
         
         function [nextState, reward, isDone, loggedSignals] = step(obj, action)
-            opponent = load(".\agentMatrix.mat").agentMatrix;
-            opponent = opponent(size(opponent,2));
+            if(obj.opponent ~= 0)
+                opponent = obj.agentMatrix(obj.opponent);
+            end
             for i = 1:2
                 loggedSignals = [];
     
@@ -37,7 +42,7 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
                 if(obj.player == 1)
                     [validMove, playAt] = obj.getValidMove(action);
                 else
-                    if (isa(opponent,"int16"))
+                    if (obj.opponent == 0)
                         opp = [randi(7)];
                     else
                         opp = getAction(opponent,nextState);
@@ -46,7 +51,7 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
                     [validMove, playAt] = obj.getValidMove(opp); %Random computer move, change for agent action later
                 end
                 if ~validMove
-                    reward = -10*obj.player; % Straffa ogiltigt drag
+                    reward = -10*obj.player*(obj.discount^(obj.turns - 4)); % Straffa ogiltigt drag
                     nextState = obj.getObservation();
                     isDone = true;
                     return;
@@ -58,12 +63,13 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
                 
                 % Belöningsfunktion
                 if isWin
-                    reward = 10*obj.player; % Stor belöning vid vinst
+                    reward = 10*obj.player*(obj.discount^(obj.turns - 4)); % Stor belöning vid vinst
                     nextState = obj.getObservation();
                     isDone = true;
                     return;
                 else
                     reward = 0; % Ingen belöning för neutralt drag
+                    obj.turns = obj.turns + 1;
                 end
                 
                 % Byt spelare
@@ -78,6 +84,11 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
             obj.board = zeros(obj.Rows, obj.Columns);
             obj.player = 1;
             obj.isDone = false;
+            obj.turns = 1;
+
+            %Randomize which oppoenent to play
+            obj.opponent = randi(size(obj.agentMatrix,2) + 1) - 1;
+
             state = obj.getObservation();
         end
         

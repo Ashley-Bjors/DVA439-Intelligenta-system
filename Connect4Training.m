@@ -3,7 +3,7 @@ clear
 startNew = false;
 if(startNew)
     %   If you want to start from scratch
-    agent = load(".\basicAgent.mat").agent;
+    agent = load(".\basicAgent.mat").agent_1;
     agentMatrix = agent;
     save("agentMatrix.mat","agentMatrix");
 else
@@ -14,10 +14,11 @@ end
 
 
 
-trainingIterations = 0;
+trainingIterations = 5;
 
-env = createConnect4Env();
+
 for i = 1:trainingIterations
+    env = createConnect4Env();
     %Trains the newest agent
     agent = mytrain(agent,env);
     
@@ -26,4 +27,5 @@ for i = 1:trainingIterations
     save("agentMatrix.mat","agentMatrix");
 end
 
-winrate = verifyConnect4()
+[winrate, winmatrix, winsPerAgent] = verifyConnect4()
+
