@@ -14,10 +14,11 @@ end
 
 
 
-trainingIterations = 0;
+trainingIterations = 1;
 
-env = createConnect4Env();
+
 for i = 1:trainingIterations
+    env = createConnect4Env();
     %Trains the newest agent
     agent = mytrain(agent,env);
     
