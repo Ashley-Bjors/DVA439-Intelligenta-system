@@ -50,7 +50,7 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
                     [validMove, playAt] = obj.getValidMove(opp); %Random computer move, change for agent action later
                 end
                 if ~validMove
-                    reward = -10*obj.player; % Straffa ogiltigt drag
+                    reward = -10*obj.player*(obj.discount^(obj.turns - 4)); % Straffa ogiltigt drag
                     nextState = obj.getObservation();
                     isDone = true;
                     return;
@@ -62,12 +62,13 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
                 
                 % Belöningsfunktion
                 if isWin
-                    reward = 10*obj.player; % Stor belöning vid vinst
+                    reward = 10*obj.player*(obj.discount^(obj.turns - 4)); % Stor belöning vid vinst
                     nextState = obj.getObservation();
                     isDone = true;
                     return;
                 else
                     reward = 0; % Ingen belöning för neutralt drag
+                    obj.turns = obj.turns + 1;
                 end
                 
                 % Byt spelare
@@ -82,6 +83,7 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
             obj.board = zeros(obj.Rows, obj.Columns);
             obj.player = 1;
             obj.isDone = false;
+            obj.turns = 1;
             state = obj.getObservation();
         end
         
