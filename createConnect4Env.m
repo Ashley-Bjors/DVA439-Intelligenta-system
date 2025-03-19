@@ -5,6 +5,10 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
         board
         player = 1; % 1 eller -1
         isDone = false;
+        opponent = 1
+        turns = 1
+        discount = 0.9
+        agentMatrix = load(".\agentMatrix.mat").agentMatrix;
     end
     
     methods
