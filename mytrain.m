@@ -10,8 +10,8 @@ function [newAgent,trainStats] = mytrain(agent,env)
 trainOptions = rlTrainingOptions();
 trainOptions.MaxEpisodes = 100;
 trainOptions.MaxStepsPerEpisode = 50;
-%trainOptions.Plots = "none"; %Removes plots
-%trainOptions.Verbose = 1; %Outputs results into Command Window
+trainOptions.Plots = "none"; %Removes plots
+trainOptions.Verbose = 1; %Outputs results into Command Window
 %% Make copy of agent
 newAgent = copy(agent);
 
