@@ -27,8 +27,9 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
         end
         
         function [nextState, reward, isDone, loggedSignals] = step(obj, action)
-            opponent = load(".\agentMatrix.mat").agentMatrix;
-            opponent = opponent(size(opponent,2));
+            if(obj.opponent ~= 0) %If the opponent is not the random agent
+                opponent = obj.agentMatrix(obj.opponent); %Choose a previous agent
+            end
             for i = 1:2
                 loggedSignals = [];
     
@@ -41,7 +42,7 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
                 if(obj.player == 1)
                     [validMove, playAt] = obj.getValidMove(action);
                 else
-                    if (isa(opponent,"int16"))
+                    if (obj.opponent == 0)%If the opponent is the random agent
                         opp = [randi(7)];
                     else
                         opp = getAction(opponent,nextState);
@@ -84,6 +85,10 @@ classdef createConnect4Env < rl.env.MATLABEnvironment
             obj.player = 1;
             obj.isDone = false;
             obj.turns = 1;
+
+            %Randomize which oppoenent to play
+            obj.opponent = randi(size(obj.agentMatrix,2) + 1) - 1;
+            
             state = obj.getObservation();
         end
         
