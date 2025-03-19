@@ -14,7 +14,7 @@ end
 
 
 
-trainingIterations = 5;
+trainingIterations = 50;
 
 
 for i = 1:trainingIterations
