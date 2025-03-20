@@ -1,4 +1,4 @@
-function [newAgent,trainStats] = mytrain(agent,env)
+function [newAgent,trainStats] = mytrain(agent,env,dataBase)
 % [NEWAGENT,TRAINSTATS] = mytrain(AGENT,ENV) train AGENT within ENVIRONMENT
 % with the training options specified on the Train tab of the Reinforcement Learning Designer app.
 % mytrain returns trained agent NEWAGENT and training statistics TRAINSTATS.
@@ -8,10 +8,10 @@ function [newAgent,trainStats] = mytrain(agent,env)
 
 %% Create training options
 trainOptions = rlTrainingOptions();
-trainOptions.MaxEpisodes = 100;
+trainOptions.MaxEpisodes = 10*dataBase;
 trainOptions.MaxStepsPerEpisode = 50;
 trainOptions.Plots = "none"; %Removes plots
-trainOptions.Verbose = 1; %Outputs results into Command Window
+%trainOptions.Verbose = 1; %Outputs results into Command Window
 %% Make copy of agent
 newAgent = copy(agent);
 
