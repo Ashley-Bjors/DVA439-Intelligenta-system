@@ -1,4 +1,4 @@
-clear
+
 
 startNew = false;
 if(startNew)
@@ -14,7 +14,7 @@ end
 
 
 
-trainingIterations = 10;
+trainingIterations = 50;
 
 
 for i = 1:trainingIterations

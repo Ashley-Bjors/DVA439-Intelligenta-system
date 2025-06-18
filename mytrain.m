@@ -6,6 +6,10 @@ function [newAgent,trainStats] = mytrain(agent,env,dataBase)
 % Reinforcement Learning Toolbox
 % Generated on: 14-Mar-2025 13:47:28
 
+%create epsilon decay
+ed = 1-0.1^(1/(5*dataBase));
+agent.AgentOptions.EpsilonGreedyExploration.EpsilonDecay = ed;
+
 %% Create training options
 trainOptions = rlTrainingOptions();
 trainOptions.MaxEpisodes = 10*dataBase;

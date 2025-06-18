@@ -4,7 +4,7 @@ env.displayBoard();
 
 
 agentMatrix = load(".\agentMatrix").agentMatrix;
-agent = agentMatrix(130);
+agent = agentMatrix(size(agentMatrix),1);
 
 whoIsFirst = 1;
 if(whoIsFirst == 1)
