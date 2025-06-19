@@ -1,7 +1,8 @@
 function winRate = verifyConnect4()
 
 
-agentMatrix = load(".\agentMatrix").agentMatrix;
+%agentMatrix = load(".\agentMatrix").agentMatrix;
+agentMatrix = load(".\putTogether").putTogether;
 winRate(size(agentMatrix,2),size(agentMatrix,2)) = 0;
 
 sizeOfMatrix = size(agentMatrix,2);
